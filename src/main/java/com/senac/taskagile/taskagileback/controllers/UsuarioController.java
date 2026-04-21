@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/usuarios")
-@Tag(description = "serviço responsável por controlar o usuário", name = "serviço do usuário")
+@Tag(name = "Usuarios controller",description = "Controladora responsavel por gerenciar os usuarios!")
 public class UsuarioController {
 
     @Autowired

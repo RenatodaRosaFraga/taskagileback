@@ -20,6 +20,7 @@ public class AuthController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+
     @Autowired
     private TokenService tokenService;
 
@@ -32,13 +33,10 @@ public class AuthController {
 
             var token = tokenService.gerarToken(loginRequest.email());
 
-
             return ResponseEntity.ok(new LoginResponse(token));
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
-
     }
 
 }
