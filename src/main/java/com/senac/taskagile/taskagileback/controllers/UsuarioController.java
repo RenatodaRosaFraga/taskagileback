@@ -1,45 +1,59 @@
 package com.senac.taskagile.taskagileback.controllers;
 
+
 import com.senac.taskagile.taskagileback.model.DTO.AlterarStatusRequest;
 import com.senac.taskagile.taskagileback.model.entities.Usuario;
 import com.senac.taskagile.taskagileback.model.repository.UsuarioRepository;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/usuarios")
-@Tag(description = "serviço responsável por controlar o usuário", name = "serviço do usuário")
+@Tag(name = "Usuarios controller",description = "Controladora responsavel por gerenciar os usuarios!")
 public class UsuarioController {
 
-    private final UsuarioRepository usuarioRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-    public UsuarioController(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
-    }
 
     @GetMapping
+    @Operation(summary = "Listar todos",description = "Controladora responsavel por gerenciar os usuarios!")
     public ResponseEntity<List<Usuario>> listarTodos() {
-        List<Usuario> usuarios = usuarioRepository.findAll();
+
+        var usuarios = usuarioRepository.findAll();
         return ResponseEntity.ok(usuarios);
     }
 
+    @GetMapping("/usuariologad")
+    @Operation(summary = "Consulta usuario logado", description = "busca usuario da sessão")
+    public ResponseEntity<Usuario> buscarUsuarioLogado(Authentication authentication){
+        Usuario usuario = (Usuario) authentication.getPrincipal();
+
+        return ResponseEntity.ok(usuarioRepository.findById(usuario.getId()).orElse(null));
+    }
+
     @GetMapping("/{id}")
+    @Operation(summary = "Consulta de usuario por ID", description =  "Método responsavel por consulta um unico usuario por ID e se não existir retorna null")
     public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
-        return usuarioRepository.findById(id)
-                .map(usuario -> ResponseEntity.ok(usuario))
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(usuarioRepository.findById(id).orElse(null));
     }
 
     @PostMapping
+    @Operation(summary = "Criar usuario", description = "Metodo responsavel por criar usuário")
     public ResponseEntity<Long> salvar(@RequestBody Usuario usuario) {
+
         return ResponseEntity.ok(usuarioRepository.save(usuario).getId());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> atualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
+    @Operation(summary = "Atualizar usuario", description = "Metodo responsavel por atualizar usuário")
+    public ResponseEntity<?> alterarUsuario (@PathVariable Long id, @RequestBody Usuario usuario) {
 
         var usuarioBanco = usuarioRepository.findById(id).orElse(null);
 
@@ -49,10 +63,12 @@ public class UsuarioController {
             usuarioBanco.setSenha(usuario.getSenha());
             usuarioBanco.setStatus(usuario.getStatus());
 
+
             usuarioRepository.save(usuarioBanco);
 
             return ResponseEntity.ok("Atualizado com sucesso!");
         }
+
 
         return ResponseEntity.notFound().build();
     }
@@ -72,5 +88,6 @@ public class UsuarioController {
 
         return ResponseEntity.notFound().build();
     }
+
 
 }

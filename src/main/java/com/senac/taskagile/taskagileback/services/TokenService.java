@@ -4,7 +4,12 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.senac.taskagile.taskagileback.model.entities.Token;
+import com.senac.taskagile.taskagileback.model.repository.TokenRepository;
+import com.senac.taskagile.taskagileback.model.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -23,13 +28,29 @@ public class TokenService {
     @Value("${spring.tempoExpiracao}")
     private Long tempoExpiracao;
 
-    public DecodedJWT validarToken(String token){
-        Algorithm algoritimo = Algorithm.HMAC256(secret);
-        JWTVerifier verifier = JWT.require(algoritimo)
-                .withIssuer(emissor)
-                .build();
+    @Autowired
+    private TokenRepository tokenRepository;
 
-        return verifier.verify(token);
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    public UserDetails validarToken(String token){
+
+        try {
+
+            Algorithm algoritimo = Algorithm.HMAC256(secret);
+            JWTVerifier verifier = JWT.require(algoritimo)
+                    .withIssuer(emissor)
+                    .build();
+            verifier.verify(token);
+
+            var tokenBanco = tokenRepository.findTokenByToken(token);
+
+            return tokenBanco.get().getUsuario();
+
+        }catch (Exception e){
+            throw new RuntimeException();
+        }
     }
 
     public String gerarToken(String email) {
@@ -42,6 +63,12 @@ public class TokenService {
                     .withExpiresAt(gerarDataExpiracao())
                     .sign(algoritimo);
 
+            var usuario = usuarioRepository.findAll()
+                    .stream()
+                    .filter(u -> u.getEmail().equals(email)).findFirst().orElse(null);
+
+            tokenRepository.save(new Token(token, usuario));
+
             return token;
 
         } catch (Exception e){
@@ -50,8 +77,6 @@ public class TokenService {
     }
 
     private Instant gerarDataExpiracao(){
-
         return LocalDateTime.now().plusMinutes(tempoExpiracao).toInstant(ZoneOffset.of("-03:00"));
     }
-
 }
