@@ -1,10 +1,11 @@
 package com.senac.taskagile.taskagileback.controllers;
 
 
-import com.senac.taskagile.taskagileback.model.DTO.LoginRequest;
-import com.senac.taskagile.taskagileback.model.DTO.LoginResponse;
-import com.senac.taskagile.taskagileback.model.repository.UsuarioRepository;
-import com.senac.taskagile.taskagileback.services.TokenService;
+import com.senac.taskagile.taskagileback.application.DTO.LoginRequest;
+import com.senac.taskagile.taskagileback.application.DTO.LoginResponse;
+import com.senac.taskagile.taskagileback.domain.repository.UsuarioRepository;
+import com.senac.taskagile.taskagileback.application.services.TokenService;
+import com.senac.taskagile.taskagileback.application.services.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +25,15 @@ public class AuthController {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     @PostMapping("/login")
     @Operation(description = "Valida senha asdasad 50 caracteres, calcula a longitude", summary = "Login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
 
 
-        if(loginRequest.email().equals("String@s") && loginRequest.senha().equals("String@s")){
+        if(usuarioService.ValidaUsuarioSenha(loginRequest)){
 
             var token = tokenService.gerarToken(loginRequest.email());
 
@@ -38,5 +42,6 @@ public class AuthController {
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
 
 }

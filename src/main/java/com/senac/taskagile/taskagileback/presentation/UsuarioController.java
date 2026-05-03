@@ -1,13 +1,15 @@
 package com.senac.taskagile.taskagileback.controllers;
 
 
-import com.senac.taskagile.taskagileback.model.DTO.AlterarStatusRequest;
-import com.senac.taskagile.taskagileback.model.entities.Usuario;
-import com.senac.taskagile.taskagileback.model.repository.UsuarioRepository;
+import com.senac.taskagile.taskagileback.application.DTO.AlterarStatusRequest;
+import com.senac.taskagile.taskagileback.domain.entities.Usuario;
+import com.senac.taskagile.taskagileback.domain.repository.UsuarioRepository;
+import com.senac.taskagile.taskagileback.application.services.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,20 +22,34 @@ public class UsuarioController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
 
     @GetMapping
     @Operation(summary = "Listar todos",description = "Controladora responsavel por gerenciar os usuarios!")
     public ResponseEntity<List<Usuario>> listarTodos() {
 
-        var usuarios = usuarioRepository.findAll();
+        var usuarios = usuarioService.ListarTodos();
+
         return ResponseEntity.ok(usuarios);
+    }
+
+    @GetMapping("/usuariologado")
+    @Operation(summary = "Consulta usuario logado", description =  "busca usuario da sessão")
+    public ResponseEntity<Usuario> buscarUsarioLogado(Authentication authentication){
+        Usuario usuario = (Usuario) authentication.getPrincipal();
+        return ResponseEntity.ok(usuarioService.BuscarUsuarioLogado(usuario));
     }
 
 
     @GetMapping("/{id}")
-    @Operation(summary = "Consulta de usuario por ID", description =  "Método responsavel por consulta um unico usuario por ID e se não existir retorna null")
-    public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(usuarioRepository.findById(id).orElse(null));
+    @Operation(summary = "Consulta de usuario por ID", description = "Médoto responsavel por consultar um unico usuario por ID e se não existir retorna null!")
+    public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id){
+
+
+        return ResponseEntity.ok(usuarioService.BuscarUsuarioPorId(id));
+
     }
 
     @PostMapping
@@ -47,22 +63,8 @@ public class UsuarioController {
     @Operation(summary = "Atualizar usuario", description = "Metodo responsavel por atualizar usuário")
     public ResponseEntity<?> alterarUsuario (@PathVariable Long id, @RequestBody Usuario usuario) {
 
-        var usuarioBanco = usuarioRepository.findById(id).orElse(null);
-
-        if (usuarioBanco != null) {
-            usuarioBanco.setEmail(usuario.getEmail());
-            usuarioBanco.setNome(usuario.getNome());
-            usuarioBanco.setSenha(usuario.getSenha());
-            usuarioBanco.setStatus(usuario.getStatus());
-
-
-            usuarioRepository.save(usuarioBanco);
-
-            return ResponseEntity.ok("Atualizado com sucesso!");
-        }
-
-
-        return ResponseEntity.notFound().build();
+        var alterarUsuarioResult = usuarioService.AterarUsuario(id,usuario);
+        return alterarUsuarioResult ? ResponseEntity.ok("Atualizado com sucesso!") : ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{id}/AlterarStatus")

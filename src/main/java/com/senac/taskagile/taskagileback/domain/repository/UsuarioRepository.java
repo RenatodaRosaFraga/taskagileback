@@ -1,11 +1,13 @@
 package com.senac.taskagile.taskagileback.model.repository;
 
 import com.senac.taskagile.taskagileback.model.entities.Usuario;
+import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+
 @Repository
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
 
-
+    boolean existsUsuarioByEmailContainingAndSenha(String email, String senha);
 }

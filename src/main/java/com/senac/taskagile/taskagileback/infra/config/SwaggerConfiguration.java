@@ -1,4 +1,4 @@
-package com.senac.taskagile.taskagileback.config;
+package com.senac.taskagile.taskagileback.infra.config;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfiguration {
 
+
     @Bean
     public OpenAPI customOpenApi(){
         return new OpenAPI()
@@ -20,7 +21,6 @@ public class SwaggerConfiguration {
                                 .scheme("bearer")
                                 .bearerFormat("JWT")
                 ))
-
                 .info( new Info()
                 .title("Task Agile")
                 .version("1.0")

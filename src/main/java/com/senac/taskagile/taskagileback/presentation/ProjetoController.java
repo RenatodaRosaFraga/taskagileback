@@ -1,7 +1,7 @@
 package com.senac.taskagile.taskagileback.controllers;
 
-import com.senac.taskagile.taskagileback.model.entities.Projeto;
-import com.senac.taskagile.taskagileback.model.repository.ProjetoRepository;
+import com.senac.taskagile.taskagileback.domain.entities.Projeto;
+import com.senac.taskagile.taskagileback.domain.repository.ProjetoRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package com.senac.taskagile.taskagileback.config;
+package com.senac.taskagile.taskagileback.infra.config;
 
 
 import com.senac.taskagile.taskagileback.services.TokenService;
@@ -7,10 +7,14 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collections;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -40,15 +44,23 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String header = request.getHeader("Authorization");
 
-        if (header != null&& header.startsWith("Bearer ")){
-            String token = header.replace("Bearer ", "");
+        if(header != null&& header.startsWith("Bearer ")){
+            String token = header.replace("Bearer ","");
 
-            //validar TOken JWT
-            var retornotoken = tokenService.validarToken(token);
+            //Validar TOken JWT
+            var retornotoken =tokenService.validarToken(token);
 
-            String username = retornotoken.getSubject();
+            var usuarioLogado  = retornotoken;
 
-            System.out.println("Usuario autenticado!" + username);
+            UsernamePasswordAuthenticationToken usuario = new UsernamePasswordAuthenticationToken(
+                    usuarioLogado,
+                    null,
+                    usuarioLogado.getAuthorities()
+            );
+
+            SecurityContextHolder.getContext().setAuthentication(usuario);
+
+
 
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -57,5 +69,8 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+
+
+
     }
 }
