@@ -1,4 +1,4 @@
-package com.senac.taskagile.taskagileback.model.entities;
+package com.senac.taskagile.taskagileback.domain.entities;
 
 
 import jakarta.persistence.*;

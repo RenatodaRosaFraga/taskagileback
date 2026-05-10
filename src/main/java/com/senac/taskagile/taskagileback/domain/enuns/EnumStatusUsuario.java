@@ -1,4 +1,4 @@
-package com.senac.taskagile.taskagileback.model.enuns;
+package com.senac.taskagile.taskagileback.domain.enuns;
 
 public enum EnumStatusUsuario {
     ATIVO,

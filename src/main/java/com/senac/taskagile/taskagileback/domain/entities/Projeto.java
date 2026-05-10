@@ -1,6 +1,6 @@
-package com.senac.taskagile.taskagileback.model.entities;
+package com.senac.taskagile.taskagileback.domain.entities;
 
-import com.senac.taskagile.taskagileback.model.enuns.EnumStatusProjeto;
+import com.senac.taskagile.taskagileback.domain.enuns.EnumStatusProjeto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

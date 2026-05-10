@@ -1,9 +1,8 @@
-package com.senac.taskagile.taskagileback.controllers;
+package com.senac.taskagile.taskagileback.presentation;
 
 
 import com.senac.taskagile.taskagileback.application.DTO.LoginRequest;
 import com.senac.taskagile.taskagileback.application.DTO.LoginResponse;
-import com.senac.taskagile.taskagileback.domain.repository.UsuarioRepository;
 import com.senac.taskagile.taskagileback.application.services.TokenService;
 import com.senac.taskagile.taskagileback.application.services.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,10 +16,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 @Tag(description = "Serviço responsavel por controlar a autentição de usuario e sessão!", name = "Serviço de autenticação")
 public class AuthController {
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
 
     @Autowired
     private TokenService tokenService;

@@ -1,4 +1,4 @@
-package com.senac.taskagile.taskagileback.domain.DTO;
+package com.senac.taskagile.taskagileback.application.DTO;
 
 import com.senac.taskagile.taskagileback.domain.enuns.EnumStatusUsuario;
 

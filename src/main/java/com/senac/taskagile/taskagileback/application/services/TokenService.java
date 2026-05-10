@@ -1,4 +1,4 @@
-package com.senac.taskagile.taskagileback.presentation;
+package com.senac.taskagile.taskagileback.application.services;
 
 
 import com.auth0.jwt.JWT;
@@ -37,7 +37,6 @@ public class TokenService {
 
 
     public Usuario validarToken(String token) {
-
         try {
 
             Algorithm algoritomo = Algorithm.HMAC256(secret);

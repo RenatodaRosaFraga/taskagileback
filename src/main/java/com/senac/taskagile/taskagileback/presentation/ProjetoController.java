@@ -1,4 +1,4 @@
-package com.senac.taskagile.taskagileback.controllers;
+package com.senac.taskagile.taskagileback.presentation;
 
 import com.senac.taskagile.taskagileback.domain.entities.Projeto;
 import com.senac.taskagile.taskagileback.domain.repository.ProjetoRepository;

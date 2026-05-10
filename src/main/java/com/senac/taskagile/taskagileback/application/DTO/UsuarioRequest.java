@@ -1,4 +1,8 @@
 package com.senac.taskagile.taskagileback.application.DTO;
 
-public class UsuarioRequest {
+public record UsuarioRequest(
+        String nome,
+        String email,
+        String senha
+) {
 }

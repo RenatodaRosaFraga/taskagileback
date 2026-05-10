@@ -1,12 +1,15 @@
-package com.senac.taskagile.taskagileback.presentation;
+package com.senac.taskagile.taskagileback.application.services;
 
-import com.senac.taskagile.taskagileback.domain.DTO.LoginRequest;
+import com.senac.taskagile.taskagileback.application.DTO.LoginRequest;
+import com.senac.taskagile.taskagileback.application.DTO.UsuarioRequest;
+import com.senac.taskagile.taskagileback.application.DTO.UsuarioResponse;
 import com.senac.taskagile.taskagileback.domain.entities.Usuario;
 import com.senac.taskagile.taskagileback.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService {
@@ -26,9 +29,12 @@ public class UsuarioService {
     }
 
 
-    public List<Usuario> ListarTodos() {
+    public List<UsuarioResponse> ListarTodos() {
         try{
-            return usuarioRepository.findAll();
+            return usuarioRepository.findAll()
+                    .stream()
+                    .map(UsuarioResponse::new)
+                    .collect(Collectors.toList());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -43,9 +49,10 @@ public class UsuarioService {
         }
     }
 
-    public Usuario BuscarUsuarioPorId(Long id) {
+    public UsuarioResponse BuscarUsuarioPorId(Long id) {
         try{
-            return usuarioRepository.findById(id).orElse(null);
+            var usuario = usuarioRepository.findById(id).orElse(null);
+            return new UsuarioResponse(usuario);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -56,7 +63,7 @@ public class UsuarioService {
 
         var usuarioBanco = usuarioRepository.findById(id).orElse(null);
 
-        if (usuarioBanco != null){
+        if (usuarioBanco != null) {
             usuarioBanco.setEmail(usuario.getEmail());
             usuarioBanco.setNome(usuario.getNome());
             usuarioBanco.setSenha(usuario.getSenha());
@@ -69,5 +76,14 @@ public class UsuarioService {
         }
 
         return false;
+    }
+
+        public Long SalvarUsuario(UsuarioRequest usuario) {
+            try {
+                return usuarioRepository.save(new Usuario(usuario)).getId();
+            }catch (Exception e){
+                throw new RuntimeException(e);
+            }
+
     }
 }
