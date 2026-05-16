@@ -1,6 +1,7 @@
 package com.senac.taskagile.taskagileback.application.services;
 
 import com.senac.taskagile.taskagileback.application.DTO.LoginRequest;
+import com.senac.taskagile.taskagileback.application.DTO.UsuarioAdmRequest;
 import com.senac.taskagile.taskagileback.application.DTO.UsuarioRequest;
 import com.senac.taskagile.taskagileback.application.DTO.UsuarioResponse;
 import com.senac.taskagile.taskagileback.domain.entities.Usuario;
@@ -85,5 +86,21 @@ public class UsuarioService {
                 throw new RuntimeException(e);
             }
 
+
+    }
+
+    public Long SalvarUsuarioAdm(UsuarioAdmRequest usuario) {
+        try {
+
+            if (usuario.secretKey()) {
+                return usuarioRepository.save(new Usuario(usuario)).getId();
+            }else
+            {
+                return 0L;
+            }
+
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.senac.taskagile.taskagileback.presentation;
 
 import com.senac.taskagile.taskagileback.application.DTO.AlterarStatusRequest;
+import com.senac.taskagile.taskagileback.application.DTO.UsuarioAdmRequest;
 import com.senac.taskagile.taskagileback.application.DTO.UsuarioRequest;
 import com.senac.taskagile.taskagileback.application.DTO.UsuarioResponse;
 import com.senac.taskagile.taskagileback.domain.entities.Usuario;
@@ -43,6 +44,13 @@ public class UsuarioController {
     @Operation(summary = "Criar usuario", description = "Metodo resposavel por criar usuário")
     public ResponseEntity<Long> salvar(@RequestBody UsuarioRequest usuario) {
         return ResponseEntity.ok(usuarioService.SalvarUsuario(usuario));
+    }
+
+    @PostMapping("/adm")
+    @Operation(summary = "Criar usuario adm",description = "Metodo resposavel por criar usuário")
+    public ResponseEntity<Long> salvarAdm (@RequestBody UsuarioAdmRequest usuario){
+
+        return ResponseEntity.ok(usuarioService.SalvarUsuarioAdm(usuario));
     }
 
     @PutMapping("/{id}")

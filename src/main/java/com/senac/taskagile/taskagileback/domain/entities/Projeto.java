@@ -21,6 +21,26 @@ public class Projeto {
 
     private String prazo;
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getPrazo() {
+        return prazo;
+    }
+
+    public void setPrazo(String prazo) {
+        this.prazo = prazo;
+    }
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EnumStatusProjeto status = EnumStatusProjeto.ATIVO;
@@ -32,6 +52,5 @@ public class Projeto {
             this.status = EnumStatusProjeto.ATIVO;
         }
     }
+
 }
-
-

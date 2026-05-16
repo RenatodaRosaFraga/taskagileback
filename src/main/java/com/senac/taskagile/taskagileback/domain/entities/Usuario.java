@@ -1,6 +1,7 @@
 package com.senac.taskagile.taskagileback.domain.entities;
 
 import com.senac.taskagile.taskagileback.application.DTO.UsuarioRequest;
+import com.senac.taskagile.taskagileback.application.DTO.UsuarioAdmRequest;
 import com.senac.taskagile.taskagileback.domain.enuns.EnumStatusUsuario;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,11 +30,54 @@ public class Usuario implements UserDetails {
 
     private EnumStatusUsuario status = EnumStatusUsuario.ATIVO;
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public EnumStatusUsuario getStatus() {
+        return status;
+    }
+
+    public void setStatus(EnumStatusUsuario status) {
+        this.status = status;
+    }
+
     public Usuario(UsuarioRequest usuario) {
         this.email = usuario.email();
         this.nome = usuario.nome();
         this.senha = usuario.senha();
         this.role = "ROLE_USER";
+    }
+
+    public Usuario(UsuarioAdmRequest usuario) {
+        this.email = usuario.email();
+        this.nome = usuario.nome();
+        this.senha = usuario.senha();
+        this.role = "ROLE_ADM";
     }
 
     @Override

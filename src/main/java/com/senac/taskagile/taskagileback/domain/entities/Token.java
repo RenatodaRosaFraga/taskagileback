@@ -28,4 +28,8 @@ public class Token {
         this.usuario = usuario;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
 }
