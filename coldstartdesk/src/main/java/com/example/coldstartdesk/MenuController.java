@@ -1,29 +1,30 @@
 package com.example.coldstartdesk;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class MenuController {
-    @FXML
-    private TextField txtNome;
+
 
     @FXML
-    private TextField txtEmail;
+    private void onVoltarButtonClick(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("login-view.fxml"));
+        Scene scene = new Scene(loader.load());
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+    }
 
     @FXML
-    private PasswordField txtSenha;
-
-    @FXML
-    private TextField txtRole;
-
-    @FXML
-    private void onCadastrarClick() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Cadastro");
-        alert.setHeaderText(null);
-        alert.setContentText("Usuario cadastrado: " + txtNome.getText() + " - Email: " + txtEmail.getText() + " - Role: " + txtRole.getText());
-        alert.showAndWait();
+    private void onCadastroUsuarioButtonClick(ActionEvent event) throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("usuario-view.fxml"));
+        Scene scene = new Scene(loader.load());
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
     }
 }
